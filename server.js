@@ -36,7 +36,7 @@ app.use(express.static('./build'))
 
 app.use('*', (req, res) => {
 
-    res.sendile('./build/index.html');
+    res.sendfile('./build/index.html');
 
 });
 app.listen(port, () => console.log(`App listening on port ${port}`));

@@ -59,7 +59,6 @@ router.post("/register_user", (req, res) => {
     return res.status(200).json({ msg: "Please enter all fields" });
   }
 
-  email = email.toLowerCase()
   //Check for existence
   User.findOne({ email }).then(user => {
 
@@ -97,7 +96,7 @@ router.post("/register_nursery", (req, res) => {
   if (!fullname || !email || !password || !coordinates.longitude || !phone) {
     return res.status(200).json({ msg: "Please enter all fields" });
   }
-  email = email.toLowerCase()
+
   //Check for existence
   User.findOne({ email }).then(user => {
 
@@ -114,12 +113,9 @@ router.post("/register_nursery", (req, res) => {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
         if (err) throw err;
-
         newUser.password = hash;
         newUser.save().then(user => {
-
           res.json({
-
             user
           });
         }
@@ -133,7 +129,7 @@ router.post("/register_nursery", (req, res) => {
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
   //simple Validation
-  email = email.toLowerCase
+
 
   //simple Validation
   if (!email || !password) {
@@ -147,14 +143,13 @@ router.post("/login", (req, res) => {
     }
 
     // Validate password
-    bcrypt.compare(password, user.password)
-      .then(isMatch => {
-        if (!isMatch) return res.status(400).json({ msg: "Invalid Credentials" })
-        res.json({
-          user
-        });
-      }
-      );
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (!result) return res.status(400).json({ msg: "Invalid Credentials" })
+      res.json({
+        user
+      });
+    })
+
 
   });
 });
